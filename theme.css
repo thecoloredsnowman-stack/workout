@@ -42,9 +42,10 @@
   --shadow-card: 0 1px 2px rgba(40,34,22,0.04), 0 6px 18px rgba(40,34,22,0.06);
   --shadow-pop:  0 10px 34px rgba(40,34,22,0.16), 0 2px 8px rgba(40,34,22,0.08);
 
-  /* Safe areas — real device notch / home indicator (fallbacks for desktop) */
-  --safe-top: calc(env(safe-area-inset-top, 12px) + 8px);
-  --safe-bot: calc(env(safe-area-inset-bottom, 12px) + 6px);
+  /* Safe areas — map to the real device notch / home indicator.
+     Falls back to a sensible inset on browsers/desktop with no insets. */
+  --safe-top: calc(env(safe-area-inset-top, 0px) + 14px);
+  --safe-bot: calc(env(safe-area-inset-bottom, 0px) + 12px);
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -57,10 +58,9 @@ body {
   background: var(--paper);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  /* Lock as an app shell: no page scroll / rubber-band bounce */
-  position: fixed;
-  inset: 0;
-  overscroll-behavior: none;
+  height: 100dvh;            /* fill the dynamic viewport on mobile */
+  overflow: hidden;          /* the app manages its own scrolling */
+  overscroll-behavior: none; /* no rubber-band / pull-to-refresh */
 }
 
 #root { height: 100%; }

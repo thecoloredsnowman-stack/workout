@@ -3,22 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>MyBar — Calisthenics</title>
+  <title>MyBar</title>
 
-  <!-- PWA / installable web app -->
-  <link rel="manifest" href="manifest.webmanifest" />
+  <!-- PWA / installable full-screen app -->
+  <link rel="manifest" href="./manifest.webmanifest" />
   <meta name="theme-color" content="#E7E1D5" />
-  <meta name="color-scheme" content="light" />
-
-  <!-- iOS standalone (Add to Home Screen) -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="MyBar" />
-  <link rel="apple-touch-icon" href="icon-180.png" />
-  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./icon-180.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
 
-  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="./theme.css" />
 </head>
 <body>
   <div id="root"></div>
@@ -27,17 +24,10 @@
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
-  <script src="program.js"></script>
-  <script type="text/babel" src="icons.jsx"></script>
-  <script type="text/babel" src="home.jsx"></script>
-  <script type="text/babel" src="dayview.jsx"></script>
-  <script type="text/babel" src="app.jsx"></script>
-
-  <!-- Register service worker (offline + reliable install) -->
-  <script>
-    if ("serviceWorker" in navigator && location.protocol === "https:") {
-      window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
-    }
-  </script>
+  <script src="./program.js"></script>
+  <script type="text/babel" src="./icons.jsx"></script>
+  <script type="text/babel" src="./home.jsx"></script>
+  <script type="text/babel" src="./dayview.jsx"></script>
+  <script type="text/babel" src="./app.jsx"></script>
 </body>
 </html>

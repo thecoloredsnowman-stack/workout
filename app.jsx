@@ -93,28 +93,5 @@ function App() {
   );
 }
 
-/* ── Fit the fixed device frame to the viewport ── */
-function FitDevice({ children }) {
-  const [scale, setScale] = useApp(1);
-  const W = 402, H = 874;
-  useAppE(() => {
-    const fit = () => setScale(Math.min(1, (window.innerWidth - 24) / W, (window.innerHeight - 24) / H));
-    fit();
-    window.addEventListener('resize', fit);
-    return () => window.removeEventListener('resize', fit);
-  }, []);
-  return (
-    <div style={{ width: W * scale, height: H * scale }}>
-      <div style={{ width: W, height: H, transform: `scale(${scale})`, transformOrigin: 'top left' }}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function Root() {
-  // Full-bleed: the app fills the real device viewport (no simulated frame).
-  return <App />;
-}
-
-ReactDOM.createRoot(document.getElementById('root')).render(<Root />);
+/* App fills the whole viewport — it IS the phone screen, no bezel. */
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
