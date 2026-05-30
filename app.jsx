@@ -113,15 +113,8 @@ function FitDevice({ children }) {
 }
 
 function Root() {
-  return (
-    <div className="stage">
-      <FitDevice>
-        <IOSDevice>
-          <App />
-        </IOSDevice>
-      </FitDevice>
-    </div>
-  );
+  // Full-bleed: the app fills the real device viewport (no simulated frame).
+  return <App />;
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(<Root />);

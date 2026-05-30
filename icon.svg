@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#1B1A16"/>
+  <!-- pull-up bar -->
+  <rect x="96" y="150" width="320" height="26" rx="13" fill="#EC5B24"/>
+  <rect x="120" y="150" width="22" height="150" rx="11" fill="#F5F1E8"/>
+  <rect x="370" y="150" width="22" height="150" rx="11" fill="#F5F1E8"/>
+  <text x="256" y="408" font-family="Georgia, 'DM Serif Display', serif" font-size="150" font-weight="700" fill="#F5F1E8" text-anchor="middle">MB</text>
+</svg>
