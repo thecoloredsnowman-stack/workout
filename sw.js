@@ -1,5 +1,5 @@
 // MyBar service worker — network-first so updates always flow, cache for offline.
-const CACHE = "mybar-v2";
+const CACHE = "mybar-v3";
 const ASSETS = [
   "./", "./index.html", "./theme.css", "./program.js",
   "./icons.jsx", "./home.jsx", "./dayview.jsx", "./app.jsx",

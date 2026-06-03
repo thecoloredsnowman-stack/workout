@@ -7,9 +7,10 @@
 (function () {
   const e = (name, sets, reps, note, gloves) => ({ name, sets, reps, note, gloves: !!gloves });
 
-  const TYPE_CYCLE = ['P', 'L', 'H', 'P', 'L', 'H', 'R'];
-  const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const WEEKDAY_INITIALS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  // Mon=0 .. Sun=6 → workout type. Sunday is always rest.
+  const TYPE_BY_WEEKDAY = ['P', 'L', 'H', 'P', 'L', 'H', 'R'];
+  const WEEKDAYS_FULL    = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const WEEKDAYS_INIT    = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   const TYPE_INFO = {
     P: { letter: 'P', name: 'Push',        short: 'Push',        focus: 'Chest · shoulders · triceps' },
@@ -179,24 +180,35 @@
     },
   };
 
-  // Build all 60 day objects
+  // Build all 60 day objects, anchored to a start weekday (Mon=0..Sun=6).
+  // Day 1 = start weekday. Sunday always = Rest, so the cycle stays calendar-aligned.
   const DAYS = [];
-  for (let d = 1; d <= 60; d++) {
-    const type = TYPE_CYCLE[(d - 1) % 7];
-    const wd = (d - 1) % 7;
-    const block = blockOf(d);
-    const sections = type === 'R' ? [] : W[block.n][type];
-    DAYS.push({
-      day: d,
-      type,
-      typeName: TYPE_INFO[type].name,
-      weekday: WEEKDAYS[wd],
-      weekdayIdx: wd,
-      block: block.n,
-      blockName: block.name,
-      sections,
-    });
+  const WEEKDAY_INITIALS = ['', '', '', '', '', '', ''];
+
+  function rebuild(startWeekdayMon0) {
+    const s = ((startWeekdayMon0 % 7) + 7) % 7;
+    DAYS.length = 0;
+    for (let d = 1; d <= 60; d++) {
+      const wd = (s + d - 1) % 7;
+      const type = TYPE_BY_WEEKDAY[wd];
+      const block = blockOf(d);
+      const sections = type === 'R' ? [] : W[block.n][type];
+      DAYS.push({
+        day: d,
+        type,
+        typeName: TYPE_INFO[type].name,
+        weekday: WEEKDAYS_FULL[wd],
+        weekdayIdx: wd,
+        block: block.n,
+        blockName: block.name,
+        sections,
+      });
+    }
+    // Header row: rotate so column 0 matches start weekday (Day 1 sits in column 0).
+    for (let i = 0; i < 7; i++) WEEKDAY_INITIALS[i] = WEEKDAYS_INIT[(s + i) % 7];
   }
+
+  rebuild(0); // default: Monday start. app.jsx calls rebuild() again with the real start weekday.
 
   function isTimed(reps) { return /^\d+s$/.test(String(reps).trim()); }
   function targetSeconds(reps) { const m = String(reps).match(/^(\d+)s$/); return m ? +m[1] : 0; }
@@ -206,7 +218,7 @@
   }
 
   window.MYBAR = {
-    DAYS, BLOCKS, TYPE_INFO, TYPE_CYCLE, WEEKDAYS, WEEKDAY_INITIALS,
-    blockOf, isTimed, targetSeconds, totalSets,
+    DAYS, BLOCKS, TYPE_INFO, WEEKDAY_INITIALS,
+    blockOf, isTimed, targetSeconds, totalSets, rebuild,
   };
 })();

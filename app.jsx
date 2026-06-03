@@ -16,7 +16,18 @@ function loadStart() {
   return s;
 }
 
+// Align the program cycle to the user's actual start weekday.
+// JS getDay(): 0=Sun..6=Sat → convert to Mon=0..Sun=6.
+function alignWeekdaysToStart() {
+  const startWeekdayMon0 = (new Date(loadStart()).getDay() + 6) % 7;
+  window.MYBAR.rebuild(startWeekdayMon0);
+}
+
 function App() {
+  // Rebuild DAYS for this user's start weekday before reading from MYBAR.
+  // Cheap + idempotent, but only needs to happen once.
+  if (!window.__mybarAligned) { alignWeekdaysToStart(); window.__mybarAligned = true; }
+
   const { DAYS, totalSets } = window.MYBAR;
   const [ticks, setTicks] = useApp(loadTicks);
   const [screen, setScreen] = useApp({ name: 'home' });
