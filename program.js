@@ -1,11 +1,10 @@
 /* ═══════════════════════════════════════════════════════════
-   MyBar — 60-day program data (hardcoded, single source of truth)
+   MyBar — 60-day program data (v2: PPL, mass focus)
    Cycle: Mon P · Tue L · Wed H · Thu P · Fri L · Sat H · Sun R
-   Blocks: 1–12 Foundation · 13–24 Build · 25–42 Strength · 43–60 Peak
+   Blocks: 1–14 Foundation · 15–28 Build · 29–44 Strength · 45–60 Peak
    exposes window.MYBAR
 ═══════════════════════════════════════════════════════════ */
 (function () {
-  // exercise helper
   const e = (name, sets, reps, note, gloves) => ({ name, sets, reps, note, gloves: !!gloves });
 
   const TYPE_CYCLE = ['P', 'L', 'H', 'P', 'L', 'H', 'R'];
@@ -13,17 +12,17 @@
   const WEEKDAY_INITIALS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   const TYPE_INFO = {
-    P: { letter: 'P', name: 'Push + Legs',       short: 'Push · Legs',          focus: 'Quads / glutes + all pushing — no grip' },
-    L: { letter: 'L', name: 'Pull + Grip + Core', short: 'Pull · Grip · Core',  focus: 'Low-grip back, grip track + core' },
-    H: { letter: 'H', name: 'Legs + Core',        short: 'Legs · Core',          focus: 'Hamstrings / calves + core' },
-    R: { letter: 'R', name: 'Rest',               short: 'Rest',                 focus: 'Full recovery — muscle grows here' },
+    P: { letter: 'P', name: 'Push',        short: 'Push',        focus: 'Chest · shoulders · triceps' },
+    L: { letter: 'L', name: 'Pull',        short: 'Pull',        focus: 'Back · biceps · grip' },
+    H: { letter: 'H', name: 'Legs + Core', short: 'Legs · Core', focus: 'Quads · glutes · hamstrings · calves + core' },
+    R: { letter: 'R', name: 'Rest',        short: 'Rest',        focus: 'Full recovery — muscle grows here' },
   };
 
   const BLOCKS = [
-    { n: 1, name: 'Foundation', from: 1,  to: 12, tagline: 'Form, tendons & a low grip base' },
-    { n: 2, name: 'Build',      from: 13, to: 24, tagline: 'Reps and rounds climb' },
-    { n: 3, name: 'Strength',   from: 25, to: 42, tagline: 'Harder variations · vertical pull' },
-    { n: 4, name: 'Peak',       from: 43, to: 60, tagline: 'Hold intensity · add complexity' },
+    { n: 1, name: 'Foundation', from: 1,  to: 14, tagline: 'Establish volume, build the baseline' },
+    { n: 2, name: 'Build',      from: 15, to: 28, tagline: 'Reps and variations climb' },
+    { n: 3, name: 'Strength',   from: 29, to: 44, tagline: 'Hard variations · volume peak' },
+    { n: 4, name: 'Peak',       from: 45, to: 60, tagline: 'Complexity and intensity held' },
   ];
 
   function blockOf(day) {
@@ -31,177 +30,150 @@
   }
 
   // ── Workouts by block (1-indexed) and type ──
-  // Each: array of { name, exercises:[ e(...) ] }
   const W = {
     1: {
       P: [
         { name: 'Push', exercises: [
-          e('Push-up', 3, '12', 'Chest near-floor, full extension, controlled'),
-          e('Wide Push-up', 3, '10', 'Hands wider than shoulders'),
-          e('Pike Push-up', 3, '8', 'Hips high, head dips toward the floor'),
-        ]},
-        { name: 'Legs', exercises: [
-          e('Jump Squat', 3, '10', 'Explosive up, land soft with bent knees'),
-          e('Split Squat', 3, '8 ea', 'One foot forward, rear knee toward floor'),
-          e('Wall Sit', 3, '25s', 'Back flat on wall, thighs parallel'),
+          e('Parallette Dips', 3, '10', 'Lean slightly forward, full lockout at top'),
+          e('Push-up', 4, '15', 'Chest near-floor, controlled tempo'),
+          e('Pike Push-up', 3, '10', 'Hips high, head dips toward floor'),
+          e('Wide Push-up', 3, '12', 'Hands wider than shoulders'),
+          e('Diamond Push-up', 3, '10', 'Hands form a diamond under the chest'),
+          e('Deep Parallette Push-up', 2, '10', 'Full stretch at the bottom — go as deep as form allows'),
         ]},
       ],
       L: [
-        { name: 'Back', exercises: [
-          e('Australian Pull-up', 3, '10', 'Chest to bar, controlled', true),
-          e('Prone Y-T-W Raises', 3, '8', 'Face down, squeeze shoulder blades'),
-        ]},
-        { name: 'Grip', exercises: [
-          e('Supported Dead Hang', 5, '10s', 'Toes assisting — never to failure'),
-          e('Towel Hang', 3, '8s', 'Grip towel over the bar, supported if needed'),
-        ]},
-        { name: 'Core', exercises: [
-          e('Hollow Body Hold', 3, '20s', 'Lower back pressed to the floor'),
-          e('Plank', 3, '25s', 'Straight line, head to heels'),
+        { name: 'Pull', exercises: [
+          e('Pull-up', 4, '6', 'Chin over bar, controlled lower'),
+          e('Chin-up', 3, '8', 'Palms facing you, full range'),
+          e('Scapular Pull-up', 3, '8', 'Arms straight, shrug shoulders down/back'),
+          e('Negative Pull-up', 2, '4', 'Jump up, lower 5s under control'),
+          e('Dead Hang', 3, '30s', 'Full bodyweight, relaxed shoulders'),
         ]},
       ],
       H: [
         { name: 'Legs', exercises: [
-          e('Single-leg Romanian Deadlift', 3, '8 ea', 'Balance on one leg, hinge, flat back'),
-          e('Single-leg Glute Bridge', 3, '10 ea', 'One foot flat, drive the hips up'),
-          e('Calf Raise', 3, '15', 'Full range on a step or ledge'),
+          e('Bulgarian Split Squat', 3, '10 ea', 'Rear foot elevated, knee toward floor'),
+          e('Tempo Squat', 4, '15', '3s down, drive up — slow controlled descent'),
+          e('Reverse Lunge', 3, '12 ea', 'Step back, rear knee toward floor'),
+          e('Glute Bridge', 3, '20', 'Squeeze glutes hard at the top'),
+          e('Single-leg Calf Raise', 3, '15 ea', 'Off a step — full range'),
+          e('Wall Sit', 3, '45s', 'Thighs parallel, back flat'),
         ]},
         { name: 'Core', exercises: [
-          e('Floor Leg Raise', 3, '12', 'Lying flat, raise legs — no hanging'),
-          e('Plank', 3, '25s', 'Straight line, head to heels'),
+          e('Tuck L-sit Hold', 3, '18s', 'Parallettes — knees tucked, support body weight'),
+          e('Hanging Knee Raise', 3, '12', 'Hang from bar, raise knees to chest'),
+          e('Plank', 3, '45s', 'Straight line, head to heels'),
         ]},
       ],
     },
     2: {
       P: [
         { name: 'Push', exercises: [
-          e('Push-up', 4, '15', 'Chest near-floor, full extension'),
-          e('Wide Push-up', 3, '12', 'Hands wider than shoulders'),
-          e('Pike Push-up', 3, '10', 'Hips high, head dips toward floor'),
-          e('Diamond Push-up', 3, '10', 'Hands form a diamond under the chest'),
-        ]},
-        { name: 'Legs', exercises: [
-          e('Jump Squat', 4, '12', 'Explosive up, land soft'),
-          e('Split Squat', 3, '10 ea', 'Rear knee toward floor, controlled'),
-          e('Wall Sit', 3, '35s', 'Thighs parallel, hold'),
+          e('Parallette Dips', 4, '12', 'Controlled, full lockout'),
+          e('Decline Push-up', 4, '12', 'Feet elevated on a ledge/bench'),
+          e('Pike Push-up', 4, '12', 'Hips high, head toward floor'),
+          e('Diamond Push-up', 3, '12', 'Diamond under chest'),
+          e('Archer Push-up', 3, '6 ea', 'One arm extended sideways, lower to one side'),
+          e('Pseudo-planche Lean Hold', 3, '18s', 'Parallettes — shoulders forward over hands'),
         ]},
       ],
       L: [
-        { name: 'Back', exercises: [
-          e('Australian Pull-up', 4, '12', 'Chest to bar, controlled', true),
-          e('Feet-elevated Australian Pull-up', 3, '8', 'Feet up on a low ledge — harder angle'),
-          e('Prone Y-T-W Raises', 3, '10', 'Squeeze shoulder blades'),
-        ]},
-        { name: 'Grip', exercises: [
-          e('Supported Dead Hang', 6, '12s', 'Toes assisting — more rounds, still supported'),
-          e('Towel Hang', 3, '12s', 'Supported if needed'),
-        ]},
-        { name: 'Core', exercises: [
-          e('Hollow Body Hold', 3, '25s', 'Lower back pressed down'),
-          e('Bicycle Crunch', 3, '16', 'Alternating elbow to opposite knee'),
-          e('Plank', 3, '35s', 'Straight line, head to heels'),
+        { name: 'Pull', exercises: [
+          e('Pull-up', 4, '8', 'Chin over bar, controlled'),
+          e('Chin-up', 4, '10', 'Palms facing you'),
+          e('Scapular Pull-up', 3, '10', 'Shrug shoulders down/back'),
+          e('Negative Pull-up', 2, '5', 'Lower 5s under control'),
+          e('Dead Hang', 3, '40s', 'Full bodyweight'),
         ]},
       ],
       H: [
         { name: 'Legs', exercises: [
-          e('Single-leg Romanian Deadlift', 3, '10 ea', 'Hinge, flat back, balance'),
-          e('Nordic Curl (negatives)', 3, '5', 'Lower slowly — negatives only'),
-          e('Single-leg Glute Bridge', 3, '12 ea', 'Drive hips up'),
-          e('Calf Raise', 4, '18', 'Full range, high reps'),
+          e('Bulgarian Split Squat', 4, '12 ea', 'Rear foot elevated, controlled'),
+          e('Pause Squat', 4, '20', '2s hold at the bottom of each rep'),
+          e('Walking / Reverse Lunge', 3, '15 ea', 'Long step, knee toward floor'),
+          e('Single-leg Glute Bridge', 3, '12 ea', 'One foot flat, drive hips up'),
+          e('Single-leg Calf Raise', 4, '20 ea', 'Off a step — full range'),
+          e('Wall Sit', 3, '60s', 'Thighs parallel'),
         ]},
         { name: 'Core', exercises: [
-          e('Floor Leg Raise', 3, '15', 'Raise legs, no hanging'),
-          e('Hollow Body Hold', 3, '25s', 'Lower back pressed down'),
+          e('Advanced Tuck L-sit', 3, '20s', 'Parallettes — knees move away from chest, back rounds less'),
+          e('Hanging Leg Raise (knees bent)', 3, '12', 'Hang from bar, knees up'),
+          e('Hollow Body Hold', 3, '30s', 'Lower back pressed to floor'),
         ]},
       ],
     },
     3: {
       P: [
         { name: 'Push', exercises: [
-          e('Push-up', 4, '18', 'Chest near-floor, full extension'),
-          e('Diamond Push-up', 3, '12', 'Diamond under the chest'),
-          e('Pike Push-up', 4, '10', 'Hips high, controlled'),
-          e('Wide Push-up', 3, '12', 'Hands wide'),
-        ]},
-        { name: 'Legs', exercises: [
-          e('Jump Squat', 4, '15', 'Land soft, never lock out'),
-          e('Bulgarian Split Squat', 3, '10 ea', 'Rear foot elevated on a bench'),
-          e('Wall Sit', 3, '45s', 'Thighs parallel'),
+          e('Parallette Dips (tempo)', 4, '12', '3s down, pause at bottom'),
+          e('Archer Push-up', 4, '8 ea', 'One arm extended sideways'),
+          e('Elevated Pike Push-up', 4, '10', 'Feet raised — toward handstand push-up'),
+          e('Pseudo-planche Push-up', 3, '7', 'Parallettes — shoulders forward over hands'),
+          e('Diamond Push-up', 3, '15', 'Diamond under chest'),
+          e('Deep Parallette Push-up', 3, '12', 'Full stretch at the bottom'),
         ]},
       ],
       L: [
-        { name: 'Back', exercises: [
-          e('Australian Pull-up', 4, '14', 'Chest to bar, controlled', true),
-          e('Feet-elevated Australian Pull-up', 3, '10', 'Feet up on a ledge'),
-          e('Towel Pull-up Negatives', 3, '4', 'Jump up, lower 3–5s under control'),
-          e('Prone Y-T-W Raises', 3, '12', 'Squeeze shoulder blades'),
-        ]},
-        { name: 'Grip', exercises: [
-          e('Dead Hang (lightly supported)', 5, '20s', 'Less support — longer holds'),
-          e('Towel Hang', 3, '15s', 'Crushing grip'),
-        ]},
-        { name: 'Core', exercises: [
-          e('Floor Leg Raise', 3, '15', 'Raise legs, no hanging'),
-          e('Hollow Body Hold', 3, '30s', 'Lower back pressed down'),
-          e('Plank', 3, '45s', 'Straight line'),
+        { name: 'Pull', exercises: [
+          e('Pull-up', 5, '8', 'Chin over bar, controlled'),
+          e('Chin-up', 4, '12', 'Palms facing you'),
+          e('Wide Pull-up', 3, '6', 'Hands wider than shoulders'),
+          e('Negative Pull-up', 3, '5', 'Lower 5s under control'),
+          e('Scapular Pull-up', 3, '12', 'Shrug down/back'),
+          e('Dead Hang', 3, '50s', 'Full bodyweight'),
         ]},
       ],
       H: [
         { name: 'Legs', exercises: [
-          e('Single-leg Romanian Deadlift', 3, '12 ea', 'Hinge, flat back'),
-          e('Nordic Curl (negatives)', 3, '6', 'Lower slowly — negatives only'),
-          e('Single-leg Glute Bridge', 3, '14 ea', 'Drive hips up'),
-          e('Calf Raise', 4, '20', 'Full range'),
-          e('Single-leg Calf Raise', 3, '10 ea', 'Progression — one leg'),
+          e('Bulgarian Split Squat', 4, '15 ea', 'Rear foot elevated'),
+          e('Box / Assisted Pistol Squat', 3, '5 ea', 'Sit to a box or hold support'),
+          e('Jump Squat', 4, '15', 'Explosive, soft landing'),
+          e('Pause Squat', 4, '20', '2s hold at bottom'),
+          e('Single-leg Glute Bridge (foot elevated)', 3, '15 ea', 'Foot on a low ledge'),
+          e('Single-leg Calf Raise (slow)', 4, '20 ea', 'Controlled tempo'),
         ]},
         { name: 'Core', exercises: [
-          e('Bicycle Crunch', 3, '20', 'Elbow to opposite knee'),
-          e('Hollow Body Hold', 3, '30s', 'Lower back pressed down'),
+          e('Advanced Tuck / One-leg L-sit', 3, '18s', 'Parallettes — progress toward full L-sit'),
+          e('Hanging Leg Raise', 3, '12', 'Straighter legs as you can'),
+          e('Hollow Body Hold', 3, '40s', 'Lower back pressed down'),
         ]},
       ],
     },
     4: {
       P: [
         { name: 'Push', exercises: [
-          e('Archer Push-up', 3, '6 ea', 'One arm extended sideways, lower to one side'),
-          e('Diamond Push-up', 3, '14', 'Diamond under the chest'),
-          e('Pike Push-up', 4, '12', 'Hips high'),
-          e('Push-up', 3, '20', 'Full range, controlled'),
-        ]},
-        { name: 'Legs', exercises: [
-          e('Jump Squat', 4, '18', 'Land soft'),
-          e('Bulgarian Split Squat', 4, '12 ea', 'Rear foot elevated'),
-          e('Wall Sit', 3, '60s', 'Thighs parallel, hold'),
+          e('Parallette Dips (pause)', 4, '15', 'Pause at the bottom of each rep'),
+          e('Pseudo-planche Push-up', 4, '10', 'Shoulders forward over hands'),
+          e('Elevated Pike Push-up', 4, '8', 'Toward handstand push-up'),
+          e('Archer Push-up', 4, '8 ea', 'One arm extended sideways'),
+          e('Deep Parallette Push-up', 4, '12', 'Full stretch at bottom'),
+          e('Pseudo-planche Hold', 3, '28s', 'Parallettes — lean as far forward as you can hold'),
         ]},
       ],
       L: [
-        { name: 'Back', exercises: [
-          e('Australian Pull-up — slow tempo', 4, '12', '3s up / 3s down', true),
-          e('Feet-elevated Australian Pull-up', 4, '10', 'Feet up on a ledge'),
-          e('Towel Pull-up Negatives', 4, '5', 'Jump up, lower under control'),
-          e('Prone Y-T-W Raises', 3, '14', 'Squeeze shoulder blades'),
-        ]},
-        { name: 'Grip', exercises: [
-          e('Dead Hang (unsupported)', 5, '25s', 'Full bodyweight — grip has earned it'),
-          e('Towel Hang', 4, '18s', 'Crushing grip'),
-        ]},
-        { name: 'Core', exercises: [
-          e('Floor Leg Raise', 3, '18', 'Raise legs, no hanging'),
-          e('Hollow Body Hold', 3, '35s', 'Lower back pressed down'),
-          e('Plank', 3, '60s', 'Straight line'),
+        { name: 'Pull', exercises: [
+          e('Pull-up (tempo)', 5, '10', '3s up tempo, controlled lower'),
+          e('Wide Pull-up', 4, '8', 'Hands wider than shoulders'),
+          e('Chin-up', 4, '12', 'Palms facing you'),
+          e('Archer / Typewriter Pull-up', 3, '4 ea', 'Pull to one side, shift across'),
+          e('Negative Pull-up (slow)', 3, '5', 'Lower as slowly as possible'),
+          e('Towel Dead Hang', 3, '50s', 'Grip a towel over the bar'),
         ]},
       ],
       H: [
         { name: 'Legs', exercises: [
-          e('Single-leg Romanian Deadlift', 4, '12 ea', 'Hinge, flat back'),
-          e('Nordic Curl (negatives)', 4, '6', 'Lower slowly — negatives only'),
-          e('Single-leg Glute Bridge', 4, '15 ea', 'Drive hips up'),
-          e('Single-leg Calf Raise', 4, '12 ea', 'One leg, full range'),
-          e('Calf Raise', 3, '25', 'High reps'),
+          e('Bulgarian Split Squat (tempo)', 4, '15 ea', '3s down on each rep'),
+          e('Pistol Squat Progression', 4, '6 ea', 'Box, assisted, or full pistol'),
+          e('Jump Squat', 4, '20', 'Explosive, soft landing'),
+          e('Pause Squat', 4, '25', '2s hold at bottom'),
+          e('Single-leg RDL', 3, '8 ea', 'Hinge on one leg, flat back — Nordic negatives if anchorable'),
+          e('Single-leg Calf Raise', 4, '25 ea', 'Off a step, full range'),
         ]},
         { name: 'Core', exercises: [
-          e('Bicycle Crunch', 3, '24', 'Elbow to opposite knee'),
-          e('Hollow Body Hold', 3, '35s', 'Lower back pressed down'),
+          e('L-sit (full or one-leg)', 4, '18s', 'Parallettes — both legs straight if you can'),
+          e('Toes-to-bar or Straight Leg Raise', 4, '10', 'Hang from bar, raise straight legs'),
+          e('Hollow Body Hold', 3, '45s', 'Lower back pressed down'),
         ]},
       ],
     },
@@ -226,7 +198,6 @@
     });
   }
 
-  // is this rep a timed hold? ("25s","10s",...)
   function isTimed(reps) { return /^\d+s$/.test(String(reps).trim()); }
   function targetSeconds(reps) { const m = String(reps).match(/^(\d+)s$/); return m ? +m[1] : 0; }
   function totalSets(day) {
